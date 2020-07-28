@@ -5,6 +5,8 @@ import { Grid, GridColumn, Button } from "semantic-ui-react"; // semantic-ui
 import EventList from "../EventList/EventList";
 import EventForm from "../EventForm/EventForm";
 
+import cuid from "cuid";
+
 const eventsFromDashBoard = [
   {
     id: "1",
@@ -68,6 +70,16 @@ class EventDashBoard extends Component {
     }));
   };
 
+  handleChange = e => {
+    console.log(e.target.value);
+  };
+
+  handleCreateEvent = newEvent => {
+    newEvent.id = cuid();
+    newEvent.hostPhotoURL = "/assets/user.png";
+    this.setState(({ events }) => ({ events: [...events, newEvent] }));
+  };
+
   render() {
     const { events, isOpen } = this.state;
     return (
@@ -81,7 +93,13 @@ class EventDashBoard extends Component {
             positive
             content="Create Event"
           />
-          {isOpen && <EventForm cancelFormOpen={this.handleIdsOpenToggle} />}
+          {isOpen && (
+            <EventForm
+              createEvent={this.handleCreateEvent}
+              handleChange={this.handleChange}
+              cancelFormOpen={this.handleIdsOpenToggle}
+            />
+          )}
         </GridColumn>
       </Grid>
     );
