@@ -8,10 +8,20 @@ class EventForm extends Component {
     venue: "",
     hostedBy: ""
   };
+
+  componentDidMount() {
+    if (this.props.selectedEvent !== null) {
+      this.setState({ ...this.props.selectedEvent });
+    }
+  }
+
   handleFormSubmit = e => {
     e.preventDefault();
-    this.props.createEvent(this.state);
-    this.props.cancelFormOpen();
+    if (this.props.selectedEvent) {
+      this.props.updateEvent(this.state);
+    } else {
+      this.props.createEvent(this.state);
+    }
   };
   onHandleChange = ({ target: { name, value } }) => {
     this.setState({ [name]: value });
