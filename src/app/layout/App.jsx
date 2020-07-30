@@ -23,12 +23,21 @@ function App() {
               <NavBar />
               <Container style={{ paddingTop: "50px" }} className="main">
                 <Switch>
+                  <Route exact path="/events" component={EventDashboard} />
                   <Route path="/events/:id" component={EventDetailedPage} />
                   <Route path="/people" component={PeopleDashboard} />
                   <Route path="/profile/:id" component={UserDetailedPage} />
                   <Route path="/settings" component={SettingDashboard} />
-                  <Route path="/events" component={EventDashboard} />
-                  <Route path="/createEvent" component={EventForm} />
+                  <Route
+                    key="createEvent"
+                    path="/createEvent"
+                    component={EventForm}
+                  />
+                  <Route
+                    key="editEvent"
+                    path="/manage/:id"
+                    component={EventForm}
+                  />
                   <Route path="*" component={ErrorPage} />
                 </Switch>
               </Container>

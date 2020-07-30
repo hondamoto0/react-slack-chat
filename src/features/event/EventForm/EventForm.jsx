@@ -1,93 +1,108 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 import { Segment, Form, Button } from "semantic-ui-react";
-class EventForm extends Component {
-  state = {
+import { connect } from "react-redux";
+import { Link } from "react-router-dom";
+import {
+  createEvent,
+  updateEvent
+} from "../../../app/redux/actions/eventActions";
+const EventForm = props => {
+  const [values, setValues] = useState({ ...props.event });
+  const handleFormSubmit = e => {
+    e.preventDefault();
+    const event = { ...values };
+    if (props.event && props.event.id) {
+      props.updateEvent(event);
+      props.history.push(`/events/${values.id}`);
+    } else {
+      props.createEvent(event);
+    }
+  };
+  const onHandleChange = ({ target: { name, value } }) => {
+    setValues({ ...values, [name]: value });
+  };
+  const { title, date, city, venue, hostedBy } = values;
+  return (
+    <Segment>
+      <Form onSubmit={handleFormSubmit}>
+        <Form.Field>
+          <label>Event Title</label>
+          <input
+            name="title"
+            value={title}
+            placeholder="Event Title"
+            onChange={e => onHandleChange(e)}
+          />
+        </Form.Field>
+        <Form.Field>
+          <label>Event Date</label>
+          <input
+            name="date"
+            value={date}
+            type="date"
+            placeholder="Event Date"
+            onChange={e => onHandleChange(e)}
+          />
+        </Form.Field>
+        <Form.Field>
+          <label>City</label>
+          <input
+            name="city"
+            value={city}
+            placeholder="City event is taking place"
+            onChange={e => onHandleChange(e)}
+          />
+        </Form.Field>
+        <Form.Field>
+          <label>Venue</label>
+          <input
+            name="venue"
+            value={venue}
+            placeholder="Enter the Venue of the event"
+            onChange={e => onHandleChange(e)}
+          />
+        </Form.Field>
+        <Form.Field>
+          <label>Hosted By</label>
+          <input
+            name="hostedBy"
+            value={hostedBy}
+            placeholder="Enter the name of person hosting"
+            onChange={e => onHandleChange(e)}
+          />
+        </Form.Field>
+        <Button positive type="submit">
+          Submit
+        </Button>
+        <Button type="button" onClick={props.history.goBack}>
+          Cancel
+        </Button>
+        <Button as={Link} to="/manage/2" type="button">
+          Go
+        </Button>
+      </Form>
+    </Segment>
+  );
+};
+
+const mapStateToProps = (state, ownProps) => {
+  let event = {
     title: "",
     date: "",
     city: "",
     venue: "",
     hostedBy: ""
   };
-
-  componentDidMount() {
-    if (this.props.selectedEvent !== null) {
-      this.setState({ ...this.props.selectedEvent });
-    }
+  const { id } = ownProps.match.params;
+  if (id && state.events.length > 0) {
+    event = state.events.find(event => event.id === id);
   }
+  return { event };
+};
 
-  handleFormSubmit = e => {
-    e.preventDefault();
-    if (this.props.selectedEvent) {
-      this.props.updateEvent(this.state);
-    } else {
-      this.props.createEvent(this.state);
-    }
-  };
-  onHandleChange = ({ target: { name, value } }) => {
-    this.setState({ [name]: value });
-  };
-  render() {
-    const { cancelFormOpen } = this.props;
-    const { title, date, city, venue, hostedBy } = this.state;
-    return (
-      <Segment>
-        <Form onSubmit={this.handleFormSubmit}>
-          <Form.Field>
-            <label>Event Title</label>
-            <input
-              name="title"
-              value={title}
-              ref="title"
-              placeholder="Event Title"
-              onChange={e => this.onHandleChange(e)}
-            />
-          </Form.Field>
-          <Form.Field>
-            <label>Event Date</label>
-            <input
-              name="date"
-              value={date}
-              type="date"
-              placeholder="Event Date"
-              onChange={e => this.onHandleChange(e)}
-            />
-          </Form.Field>
-          <Form.Field>
-            <label>City</label>
-            <input
-              name="city"
-              value={city}
-              placeholder="City event is taking place"
-              onChange={e => this.onHandleChange(e)}
-            />
-          </Form.Field>
-          <Form.Field>
-            <label>Venue</label>
-            <input
-              name="venue"
-              value={venue}
-              placeholder="Enter the Venue of the event"
-              onChange={e => this.onHandleChange(e)}
-            />
-          </Form.Field>
-          <Form.Field>
-            <label>Hosted By</label>
-            <input
-              name="hostedBy"
-              value={hostedBy}
-              placeholder="Enter the name of person hosting"
-              onChange={e => this.onHandleChange(e)}
-            />
-          </Form.Field>
-          <Button positive type="submit">
-            Submit
-          </Button>
-          <Button type="button" onClick={cancelFormOpen}>
-            Cancel
-          </Button>
-        </Form>
-      </Segment>
-    );
-  }
-}
-export default EventForm;
+const actions = { createEvent, updateEvent };
+
+export default connect(
+  mapStateToProps,
+  actions
+)(EventForm);

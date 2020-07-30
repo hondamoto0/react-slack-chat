@@ -1,9 +1,32 @@
 import React, { Component } from "react";
 import { Segment, Item, Icon, List, Button } from "semantic-ui-react";
 import EventListAttandee from "./EventListAttandee";
+import { Link } from "react-router-dom";
 class EventListItem extends Component {
+  showViewAndDeleteButtons = () => {
+    const { deleteEvent, event } = this.props;
+    return (
+      <Segment clearing>
+        <span>{event.description}</span>
+        <Button
+          onClick={() => deleteEvent(event.id)}
+          as="a"
+          color="red"
+          floated="right"
+          content="Delete"
+        />
+        <Button
+          to={`events/${event.id}`}
+          as={Link}
+          color="teal"
+          floated="right"
+          content="View"
+        />
+      </Segment>
+    );
+  };
   render() {
-    const { event, selectEvent, deleteEvent } = this.props;
+    const { event } = this.props;
     return (
       <Segment.Group>
         <Segment>
@@ -33,24 +56,7 @@ class EventListItem extends Component {
               ))}
           </List>
         </Segment>
-        <Segment clearing>
-          <span>{event.description}</span>
-          ç
-          <Button
-            onClick={() => deleteEvent(event.id)}
-            as="a"
-            color="red"
-            floated="right"
-            content="Delete"
-          />
-          <Button
-            onClick={() => selectEvent(event)}
-            as="a"
-            color="teal"
-            floated="right"
-            content="View"
-          />
-        </Segment>
+        {this.showViewAndDeleteButtons()}
       </Segment.Group>
     );
   }
