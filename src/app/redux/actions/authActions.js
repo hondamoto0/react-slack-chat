@@ -1,12 +1,13 @@
 import { LOGIN_USER, SIGN_OUT_USER } from "../../constants/authConstants";
-
-export const login = creds => {
-  return {
+import { closeModal } from "./modalActions";
+export const login = creds => dispatch => {
+  dispatch({
     type: LOGIN_USER,
     payload: {
       creds
     }
-  };
+  });
+  dispatch(closeModal());
 };
 
 export const logout = () => {

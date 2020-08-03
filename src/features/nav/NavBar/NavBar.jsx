@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import { Menu, Container, Button } from "semantic-ui-react";
 import { NavLink, Link, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
@@ -7,9 +7,6 @@ import SignedOutMenu from "../Menus/SignedOutMenu";
 import SignedInMenu from "../Menus/SignedInMenu";
 import { logout } from "../../../app/redux/actions/authActions";
 class NavBar extends Component {
-  state = {
-    authenticated: false
-  };
   // UI
   showSignInMenu() {
     const { auth } = this.props;
@@ -25,8 +22,12 @@ class NavBar extends Component {
   }
 
   showSignOutMenu() {
+    const { auth } = this.props;
+    const { authenticated } = auth;
+    console.log(authenticated);
     return (
       <SignedOutMenu
+        authenticated={authenticated}
         signOut={this.handleSignOut}
         signIn={this.handleSignIn}
         register={this.handleRegister}
@@ -49,6 +50,8 @@ class NavBar extends Component {
   };
 
   render() {
+    const { auth } = this.props;
+    const { authenticated } = auth;
     return (
       <Menu inverted fixed="top">
         <Container>
@@ -57,17 +60,22 @@ class NavBar extends Component {
             Re-vents
           </Menu.Item>
           <Menu.Item as={NavLink} to="/events" name="Events" />
-          <Menu.Item as={NavLink} to="/people" name="People" />
-          <Menu.Item>
-            <Button
-              as={Link}
-              to="/createEvent"
-              floated="right"
-              positive
-              inverted
-              content="Create Event"
-            />
-          </Menu.Item>
+          {authenticated && (
+            <Fragment>
+              <Menu.Item as={NavLink} to="/people" name="People" />
+              <Menu.Item>
+                <Button
+                  as={Link}
+                  to="/createEvent"
+                  floated="right"
+                  positive
+                  inverted
+                  content="Create Event"
+                />
+              </Menu.Item>
+            </Fragment>
+          )}
+
           {this.showSignInMenu()}
           {this.showSignOutMenu()}
         </Container>

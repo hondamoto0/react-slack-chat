@@ -7,8 +7,9 @@ import { BrowserRouter } from "react-router-dom";
 import { Provider } from "react-redux";
 import { configureStore } from "./app/redux/store/configureStore";
 import ScrollToTop from "./app/common/utils/ScrollToTop";
+import { loadEvents } from "./app/redux/actions/eventActions";
 const store = configureStore();
-
+store.dispatch(loadEvents());
 ReactDOM.render(
   <Provider store={store}>
     <BrowserRouter>

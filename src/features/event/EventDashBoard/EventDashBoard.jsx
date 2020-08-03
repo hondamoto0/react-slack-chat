@@ -7,6 +7,7 @@ import {
   deleteEvent,
   updateEvent
 } from "../../../app/redux/actions/eventActions"; // Event Actions
+import LoadingComponent from "../../../app/layout/LoadingComponent";
 
 class EventDashboard extends Component {
   handleDeleteEvent = eventId => {
@@ -15,8 +16,8 @@ class EventDashboard extends Component {
   };
 
   render() {
-    const { events } = this.props;
-    console.log(events);
+    const { events, loading } = this.props;
+    if (loading) return <LoadingComponent inverted={false} />;
     return (
       <Grid>
         <GridColumn width={10}>
@@ -31,7 +32,8 @@ class EventDashboard extends Component {
 }
 
 const mapStateToProps = state => ({
-  events: state.events
+  events: state.events,
+  loading: state.async.loading
 });
 
 // const mapDispatchToProps = dispatch => ({
