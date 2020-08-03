@@ -9,11 +9,13 @@ import UserDetailedPage from "../../features/user/UserDetailed/UserDetailedPage"
 import EventForm from "../../features/event/EventForm/EventForm";
 import ErrorPage from "../../features/error/Error";
 import { Container } from "semantic-ui-react";
-import { Route, Switch } from "react-router-dom";
+import { Route, Switch, withRouter } from "react-router-dom";
+import ModalManager from "../../features/modals/ModalManager";
 
-function App() {
+function App(props) {
   return (
     <Fragment>
+      <ModalManager />
       <Switch>
         <Route exact path="/" component={HomePage} />
         <Route
@@ -22,20 +24,14 @@ function App() {
             <Fragment>
               <NavBar />
               <Container style={{ paddingTop: "50px" }} className="main">
-                <Switch>
+                <Switch key={props.location.key}>
                   <Route exact path="/events" component={EventDashboard} />
                   <Route path="/events/:id" component={EventDetailedPage} />
                   <Route path="/people" component={PeopleDashboard} />
                   <Route path="/profile/:id" component={UserDetailedPage} />
                   <Route path="/settings" component={SettingDashboard} />
                   <Route
-                    key="createEvent"
-                    path="/createEvent"
-                    component={EventForm}
-                  />
-                  <Route
-                    key="editEvent"
-                    path="/manage/:id"
+                    path={["/createEvent", "/manage/:id"]}
                     component={EventForm}
                   />
                   <Route path="*" component={ErrorPage} />
@@ -49,4 +45,4 @@ function App() {
   );
 }
 
-export default App;
+export default withRouter(App);

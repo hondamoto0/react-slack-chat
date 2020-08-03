@@ -6,7 +6,9 @@ body {
 }
 
 /* landing page styles */
-
+.react-datepicker-wrapper {
+  width: 100%;
+}
 .masthead {
   background-image: linear-gradient(
     135deg,

@@ -16,7 +16,7 @@ const EventDetailedPage = props => {
         <EventDetailedChat />
       </Grid.Column>
       <Grid.Column width={6}>
-        <EventDetailedSidebar attendees={event.attendees} />
+        <EventDetailedSidebar />
       </Grid.Column>
     </Grid>
   );
