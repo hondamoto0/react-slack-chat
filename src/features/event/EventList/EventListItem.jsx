@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import { Segment, Item, Icon, List, Button } from "semantic-ui-react";
 import EventListAttandee from "./EventListAttandee";
 import { Link } from "react-router-dom";
+import format from "date-fns/format";
+import moment from "moment";
 class EventListItem extends Component {
   showViewAndDeleteButtons = () => {
     const { deleteEvent, event } = this.props;
@@ -44,15 +46,16 @@ class EventListItem extends Component {
         </Segment>
         <Segment>
           <span>
-            {/* <Icon name="clock" /> {event.date}| */}
+            <Icon name="clock" />{" "}
+            {moment(event.date.seconds * 1000).format("DD MMM YYYY ")} |
             <Icon name="marker" /> {event.venue}
           </span>
         </Segment>
         <Segment secondary>
           <List horizontal>
             {event.attendees &&
-              event.attendees.map(attendee => (
-                <EventListAttandee key={attendee.id} attendee={attendee} />
+              Object.values(event.attendees).map((attendee, index) => (
+                <EventListAttandee key={index} attendee={attendee} />
               ))}
           </List>
         </Segment>

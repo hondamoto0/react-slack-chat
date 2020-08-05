@@ -16,7 +16,6 @@ const eventImageTextStyle = {
 };
 
 const EventDetailedHeader = ({ event }) => {
-  console.log(event.date);
   const showEventInfo = () => {
     return (
       <Segment basic attached="top" style={{ padding: "0" }}>
@@ -31,12 +30,12 @@ const EventDetailedHeader = ({ event }) => {
               <Item.Content>
                 <Header
                   size="huge"
-                  content={event.title}
+                  content={event.title && event.title}
                   style={{ color: "white" }}
                 />
-                <p>{moment(event.date).format("DD-MM-YYYY")}</p>
+                <p>{event.date && moment(event.date).format("DD-MM-YYYY")}</p>
                 <p>
-                  Hosted by <strong>{event.hostedBy}</strong>
+                  Hosted by <strong>{event.hostedBy && event.hostedBy}</strong>
                 </p>
               </Item.Content>
             </Item>

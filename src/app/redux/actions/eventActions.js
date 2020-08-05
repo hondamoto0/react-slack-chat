@@ -10,11 +10,15 @@ import {
   asyncActionFinish,
   asyncActionError
 } from "./asyncActions";
+import { toastr } from "react-redux-toastr";
 
 export const createEvent = event => {
-  return {
-    type: CREATE_EVENT,
-    payload: { event }
+  return async dispatch => {
+    dispatch({
+      type: CREATE_EVENT,
+      payload: { event }
+    });
+    toastr.success("Success!", "Event has been created ");
   };
 };
 
