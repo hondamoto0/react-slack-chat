@@ -34,20 +34,18 @@ const category = [
 const EventForm = props => {
   const [cityLatLng, setCityLatLng] = useState({});
   const [venueLatLng, setVenueLatLng] = useState({});
-  const handleFormSubmit = values => {
+  const handleFormSubmit = async values => {
     values.venueLatLng = venueLatLng;
-    const event = { ...values };
-    if (props.initialValues.id) {
-      props.updateEvent(event);
-      props.history.push(`/events/${props.initialValues.id}`);
-    } else {
-      const newEvent = {
-        ...event,
-        id: cuid(),
-        hotPhotoURL: "/assets/user.png"
-      };
-      props.createEvent(newEvent);
-      props.history.push(`/events/${newEvent.id}`);
+    try {
+      if (props.initialValues.id) {
+        props.updateEvent(values);
+        props.history.push(`/events/${props.initialValues.id}`);
+      } else {
+        let createdEvent = await this.props.createdEvent(values);
+        props.history.push(`/events/${createdEvent.id}`);
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 
